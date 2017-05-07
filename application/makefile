@@ -2,6 +2,9 @@
 
 !include common.mak
 
+# /MD Causes the application to use the multithread-specific and DLL-specific version of the run-time library.
+CFLAGS=$(CFLAGS) /MD
+
 # no built in macro for the linker so we must define one
 LINK=link.exe
 LFLAGS=
