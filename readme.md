@@ -1,6 +1,6 @@
-# WiX Snippet - Basic Application
+# WiX Snippet - Application with Microsoft CRT Merge Module
 
-This *WiX Snippet* contains the bare minimum required to generate a simple Windows application installer [msi](https://technet.microsoft.com/en-us/library/cc978328.aspx) using the [*WiX Toolset*](http://wixtoolset.org/).
+This *WiX Snippet* contains demonstrates how to create a Windows application installer [msi](https://technet.microsoft.com/en-us/library/cc978328.aspx) using the [*WiX Toolset*](http://wixtoolset.org/). The installer also installs the required Microsoft CRT runtime by using a merge module, the CRT merge modules are installed as part of a normal Visual Studio installation.
 
 ## Installation
 
@@ -8,8 +8,8 @@ From a *Microsoft Visual Studio* command prompt:
 ```powershell
 > mkdir wixsnippet
 > cd wixsnippet 
-> git clone git@github.com:fun4jimmy/wixsnippet-basicapplication.git basicapplication
-> cd basicapplication
+> git clone git@github.com:fun4jimmy/wixsnippet-crtmergemodule.git crtmergemodule
+> cd crtmergemodule
 > nmake
 ```
 
@@ -22,7 +22,7 @@ installer | WiX script to make an installer for the application.
 
 ## Requirements
 
-* Any version of *Microsoft Visual Studio*
+* *Microsoft Visual Studio* 2012, 2013 or 2015
   * **cl.exe** - used to compile .c source files.
   * **link.exe** - used to link the compiled c object files in to the application executable.
   * **nmake.exe** - used as the build chain for the project
