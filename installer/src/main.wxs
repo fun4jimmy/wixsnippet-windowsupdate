@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Product Id="47212B2F-63BD-46B1-BF02-5A79604B96C4"
+           Name="BasicApplication"
+           Language="1033"
+           Version="1.0.0"
+           Manufacturer="WiX Snippets"
+           UpgradeCode="9C1D8273-4E46-424C-BA82-D20EFCFBC354">
+
+    <Package Compressed="yes"/>
+
+    <!-- All compressed packages need at least one cabinet -->
+    <Media Id="1" Cabinet="media1.cab" EmbedCab="yes"/>
+
+    <!-- WiX dictates we must always start with this directory to setup the root directory of the installation -->
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <!-- This references the "%ProgramFiles%" windows directory -->
+      <Directory Id="ProgramFilesFolder">
+
+        <!-- Now we being our custom directory structure nested in the Windows "Program Files" directory -->
+
+        <!-- It is nice to group all our installers within the same top level directory -->
+        <Directory Id="DirectoryCompany" Name="WiX Snippets">
+          <!-- Application specific directory -->
+          <Directory Id="DirectorySnippet" Name="BasicApplication"/>
+        </Directory>
+      </Directory>
+    </Directory>
+
+    <!-- Not really necessary in this example but would be easier to extend the application contents using a group -->
+    <ComponentGroup Id="ComponentGroupApplication" Directory="DirectorySnippet">
+      <!-- We should use one file per component so WiX can automatically set the guid (Guid="*") -->
+      <Component Id="ComponentApplication" Guid="*">
+        <File Id="FileApplication" Source="..\bin\application.exe" KeyPath="yes"/>
+      </Component>
+    </ComponentGroup>
+
+    <!-- Make sure our feature is always installed (Absent="disallow") -->
+    <Feature Id="FeatureApplication" Absent="disallow">
+      <ComponentGroupRef Id="ComponentGroupApplication"/>
+    </Feature>
+
+  </Product>
+</Wix>

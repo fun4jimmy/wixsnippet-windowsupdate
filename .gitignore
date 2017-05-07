@@ -1,0 +1,10 @@
+# ignore all intermediate file extensions
+*.exe
+*.msi
+*.obj
+*.wixobj
+*.wixpdb
+
+# ignore all intermediate directories
+bin/
+**/obj/
