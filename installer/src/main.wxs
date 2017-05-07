@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-  <Product Id="47212B2F-63BD-46B1-BF02-5A79604B96C4"
-           Name="BasicApplication"
+  <Product Id="5A641B33-717D-4E9B-B058-9ADAB1DBBB2D"
+           Name="CRTMergeModule"
            Language="1033"
            Version="1.0.0"
            Manufacturer="WiX Snippets"
-           UpgradeCode="9C1D8273-4E46-424C-BA82-D20EFCFBC354">
+           UpgradeCode="A247C440-6D02-4204-8D15-D3BA8707C7B0">
 
-    <Package Compressed="yes"/>
+    <!-- The installer version has to be greater than or equal to the version Merge Module version number so change this if there
+         are any LGHT1104 warnings. -->
+    <Package InstallerVersion="405"
+             Compressed="yes"/>
 
     <!-- All compressed packages need at least one cabinet -->
     <Media Id="1" Cabinet="media1.cab" EmbedCab="yes"/>
@@ -22,7 +25,7 @@
         <!-- It is nice to group all our installers within the same top level directory -->
         <Directory Id="DirectoryCompany" Name="WiX Snippets">
           <!-- Application specific directory -->
-          <Directory Id="DirectorySnippet" Name="BasicApplication"/>
+          <Directory Id="DirectorySnippet" Name="CRTMergeModule"/>
         </Directory>
       </Directory>
     </Directory>
@@ -35,9 +38,28 @@
       </Component>
     </ComponentGroup>
 
+    <DirectoryRef Id="TARGETDIR">
+      <!-- Because the application is linked against the multithread-specific and DLL-specific version of the run-time library
+           we must also include the merge module containing the relevant visual studio merge module version. -->
+      <?if $(env.VisualStudioVersion) = "14.0"?>
+        <Merge Id="MergeCRT" SourceFile="$(env.ProgramFiles(x86))\Common Files\Merge Modules\Microsoft_VC140_CRT_x86.msm" DiskId="1" Language="0"/>
+      <?elseif $(env.VisualStudioVersion) = "12.0"?>
+        <Merge Id="MergeCRT" SourceFile="$(env.ProgramFiles(x86))\Common Files\Merge Modules\Microsoft_VC120_CRT_x86.msm" DiskId="1" Language="0"/>
+      <?elseif $(env.VisualStudioVersion) = "11.0"?>
+        <Merge Id="MergeCRT" SourceFile="$(env.ProgramFiles(x86))\Common Files\Merge Modules\Microsoft_VC110_CRT_x86.msm" DiskId="1" Language="0"/>
+      <?else?>
+        <?ifdef $(env.VisualStudioVersion)?>
+          <?error Unsupported version of Visual Studio $(env.VisualStudioVersion), unable to determine CRT merge module version.?>
+        <?else?>
+          <?error %VisualStudioVersion% envirionment variable not defined, unable to determine CRT merge module version.?>
+        <?endif?>
+      <?endif?>
+    </DirectoryRef>
+
     <!-- Make sure our feature is always installed (Absent="disallow") -->
     <Feature Id="FeatureApplication" Absent="disallow">
       <ComponentGroupRef Id="ComponentGroupApplication"/>
+      <MergeRef Id="MergeCRT"/>
     </Feature>
 
   </Product>
