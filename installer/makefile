@@ -3,6 +3,11 @@
 WIX_BIN_DIR=%wix%bin
 CANDLE_="$(WIX_BIN_DIR)\candle.exe"
 CANDLE="$(CANDLE_)"
+
+# set the architecture [x86, x64, or ia64]
+CANDLE_FLAGS=\
+	-arch x86
+
 LIGHT_="$(WIX_BIN_DIR)\light.exe"
 LIGHT="$(LIGHT_)"
 
@@ -41,7 +46,7 @@ $(INST_OBJ_DIR)\main.wixobj: $(BIN_DIR)\$(APP_TARGET_NAME)
 
 # compile src/*.wxs files to obj/*.wixobj files
 {$(INST_SRC_DIR)}.wxs{$(INST_OBJ_DIR)}.wixobj:
-	$(CANDLE) -out $(INST_OBJ_DIR)\%|fF.wixobj $<
+	$(CANDLE) $(CANDLE_FLAGS) -out $(INST_OBJ_DIR)\%|fF.wixobj $<
 
 # include the application makefile to gather all the dependencies
 !include $(APP_DIR)\makefile

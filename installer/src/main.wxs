@@ -17,8 +17,15 @@
 
     <!-- WiX dictates we must always start with this directory to setup the root directory of the installation -->
     <Directory Id="TARGETDIR" Name="SourceDir">
+
+      <?if $(sys.BUILDARCH)="x86"?>
+        <?define ProgramFilesId="ProgramFilesFolder"?>
+      <?else?>
+        <?define ProgramFilesId="ProgramFiles64Folder"?>
+      <?endif?>
+
       <!-- This references the "%ProgramFiles%" windows directory -->
-      <Directory Id="ProgramFilesFolder">
+      <Directory Id="$(var.ProgramFilesId)">
 
         <!-- Now we being our custom directory structure nested in the Windows "Program Files" directory -->
 
@@ -41,12 +48,18 @@
     <DirectoryRef Id="TARGETDIR">
       <!-- Because the application is linked against the multithread-specific and DLL-specific version of the run-time library
            we must also include the merge module containing the relevant visual studio merge module version. -->
+
+      <!-- There are no merge modules for WiX supported architecture ia64 so fail early with a nice error message -->  
+      <?if $(sys.BUILDARCH)!="x86" and $(sys.BUILDARCH)!="x64"?>
+        <?error Unsupported architecture $(sys.BUILDARCH), no merge module for this architecture.?>
+      <?endif?>
+
       <?if $(env.VisualStudioVersion) = "14.0"?>
-        <Merge Id="MergeCRT" SourceFile="$(env.ProgramFiles(x86))\Common Files\Merge Modules\Microsoft_VC140_CRT_x86.msm" DiskId="1" Language="0"/>
+        <Merge Id="MergeCRT" SourceFile="$(env.ProgramFiles(x86))\Common Files\Merge Modules\Microsoft_VC140_CRT_$(sys.BUILDARCH).msm" DiskId="1" Language="0"/>
       <?elseif $(env.VisualStudioVersion) = "12.0"?>
-        <Merge Id="MergeCRT" SourceFile="$(env.ProgramFiles(x86))\Common Files\Merge Modules\Microsoft_VC120_CRT_x86.msm" DiskId="1" Language="0"/>
+        <Merge Id="MergeCRT" SourceFile="$(env.ProgramFiles(x86))\Common Files\Merge Modules\Microsoft_VC120_CRT_$(sys.BUILDARCH).msm" DiskId="1" Language="0"/>
       <?elseif $(env.VisualStudioVersion) = "11.0"?>
-        <Merge Id="MergeCRT" SourceFile="$(env.ProgramFiles(x86))\Common Files\Merge Modules\Microsoft_VC110_CRT_x86.msm" DiskId="1" Language="0"/>
+        <Merge Id="MergeCRT" SourceFile="$(env.ProgramFiles(x86))\Common Files\Merge Modules\Microsoft_VC110_CRT_$(sys.BUILDARCH).msm" DiskId="1" Language="0"/>
       <?else?>
         <?ifdef $(env.VisualStudioVersion)?>
           <?error Unsupported version of Visual Studio $(env.VisualStudioVersion), unable to determine CRT merge module version.?>
