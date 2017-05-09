@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+  <Bundle Name="WindowsUpdate"
+          Version="1.0.0"
+          Manufacturer="WiX Snippets"
+          UpgradeCode="4EECA95D-1413-407E-B8E7-62C3B136B0F0">
+
+    <BootstrapperApplicationRef Id="WixStandardBootstrapperApplication.RtfLicense"/>
+
+    <util:FileSearch Id="FileSearchUniversalCRT_x86"
+                     Path="[WindowsFolder]\System32\ucrtbase.dll"
+                     Variable="FoundUniversalCRT_x86"/>
+    <util:FileSearch Id="FileSearchUniversalCRT_x64"
+                     Path="[WindowsFolder]\SysWOW64\ucrtbase.dll"
+                     Variable="FoundUniversalCRT_x64"/>
+
+    <Chain>
+      <MsiPackage SourceFile="$(var.BIN_DIR)\internal_application.msi"/>
+      <MsuPackage SourceFile="Windows6.1-KB2999226-x86.msu"
+                  KB="KB2999226"
+                  Compressed="no"
+                  DownloadUrl="https://download.microsoft.com/download/4/F/E/4FE73868-5EDD-4B47-8B33-CE1BB7B2B16A/Windows6.1-KB2999226-x86.msu"
+                  DetectCondition="FileSearchUniversalCRT_x86">
+      </MsuPackage>
+    </Chain>
+
+  </Bundle>
+</Wix>

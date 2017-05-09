@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-  <Product Id="5A641B33-717D-4E9B-B058-9ADAB1DBBB2D"
-           Name="CRTMergeModule"
+  <Product Id="2F85CB02-F57A-415D-B437-46D90D0F3579"
+           Name="WindowsUpdate"
            Language="1033"
            Version="1.0.0"
            Manufacturer="WiX Snippets"
-           UpgradeCode="A247C440-6D02-4204-8D15-D3BA8707C7B0">
+           UpgradeCode="25486F1D-55E1-4B36-A8E9-CC28206FCAD9">
 
     <!-- The installer version has to be greater than or equal to the version Merge Module version number so change this if there
          are any LGHT1104 warnings. -->

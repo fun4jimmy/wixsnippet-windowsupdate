@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Include>
+  <Property Id="UNIVERSAL_CRT_PATH">
+    <DirectorySearch Id="DirectorySearchUniversalCRT"
+                     Path="$(env.WINDIR)"
+                     Depth="2"
+                     AssignToProperty="yes">
+      <FileSearch Id="FileSearchUniversalCRT"
+                  Name="ucrt2base.dll"/>
+    </DirectorySearch>
+  </Property>
+
+  <Condition Message="Error finding ucrtbase.dll, application will not run.">UNIVERSAL_CRT_PATH</Condition>
+</Include>

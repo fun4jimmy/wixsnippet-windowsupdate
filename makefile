@@ -2,17 +2,17 @@
 
 # define some common directories
 BIN_DIR=bin
-INST_DIR=installer 
+BOOT_DIR=bootstrapper
 
-!include <$(INST_DIR)\common.mak>
+!include <$(BOOT_DIR)\common.mak>
 
-INSTALLER_TARGET=$(BIN_DIR)\$(INSTALLER_TARGET_NAME)
+BOOTSTRAPPER_TARGET=$(BIN_DIR)\$(BOOTSTRAPPER_TARGET_NAME)
 
 all: $(INSTALLER_TARGET)
 
 # build the installer
-$(INSTALLER_TARGET):
-	pushd "$(INST_DIR)" & nmake & popd
+$(BOOTSTRAPPER_TARGET):
+	pushd "$(BOOT_DIR)" & nmake & popd
 
 clean:
-	pushd "$(INST_DIR)" & nmake clean & popd
+	pushd "$(BOOT_DIR)" & nmake clean & popd
